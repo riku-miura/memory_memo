@@ -1,50 +1,57 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Memory Memo Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Simplicity First
+Every feature must serve a clear user need without unnecessary complexity. The application prioritizes ease of use over feature richness. New functionality is added only when it directly enhances the core memo experience without compromising the minimalist design philosophy.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Data Privacy & Security
+User data belongs to the user. Authentication is secure, memo content is protected, and users can only access their own data. No tracking, no analytics beyond essential system metrics, no data mining. Privacy by design, not by policy.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Performance & Responsiveness
+The application must feel instant. Page loads under 200ms, memo creation/editing without perceptible delay, flush memo cleanup without user impact. Performance regression is treated as a critical bug.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Clean Design Language
+Minimal flat design with intentional typography using Inter (English) and Noto Sans JP (Japanese). Large whitespace, few colors, clear visual hierarchy. Design decisions prioritize readability and cognitive ease over visual complexity.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Reliable Data Management
+Forever memos persist reliably; flush memos expire predictably at 24 hours. No data loss, no unexpected behavior. Users trust the system to handle their thoughts consistently.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Technical Standards
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Code Quality
+- Rust safety principles: no unsafe blocks without explicit justification
+- Clear error handling with meaningful user feedback
+- Comprehensive testing for data persistence and user authentication
+- Code reviews focus on security, performance, and maintability
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Deployment & Operations
+- Production deployment to https://rikumiura.com/memory_memo
+- Zero-downtime deployments
+- Automated backup and recovery procedures
+- Monitoring for performance and security incidents
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## User Experience Standards
+
+### Interface Design
+- Mobile-first responsive design
+- Keyboard shortcuts for power users
+- Accessibility compliance (WCAG 2.1 AA)
+- Consistent interaction patterns throughout the application
+
+### Content Management
+- Flush memos prominently displayed above forever memos
+- Newest items first within each category
+- No artificial limits on memo count or length (within reasonable system constraints)
+- Clear visual distinction between memo types
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution guides all development decisions. Feature requests, bug fixes, and technical improvements must align with these principles. When in doubt, choose the simpler solution that best serves the user's core need to capture and organize thoughts.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+Amendments require:
+1. Clear rationale for change
+2. Impact assessment on existing users
+3. Implementation plan that maintains backward compatibility
+
+**Version**: 1.0.0 | **Ratified**: 2025-09-07 | **Last Amended**: 2025-09-07

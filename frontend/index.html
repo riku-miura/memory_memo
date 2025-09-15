@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Memo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Auth Page -->
+        <div id="auth-page" class="page">
+            <div class="auth-container">
+                <h1 class="app-title">Memory Memo</h1>
+                <div class="auth-tabs">
+                    <button id="login-tab" class="tab-button active">ログイン</button>
+                    <button id="register-tab" class="tab-button">登録</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-username">ユーザー名</label>
+                        <input type="text" id="login-username" required minlength="3">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">パスワード</label>
+                        <input type="password" id="login-password" required minlength="8">
+                    </div>
+                    <button type="submit" class="btn-primary">ログイン</button>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="register-form" class="auth-form hidden">
+                    <div class="form-group">
+                        <label for="register-username">ユーザー名</label>
+                        <input type="text" id="register-username" required minlength="3">
+                        <small>3文字以上で入力してください</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">パスワード</label>
+                        <input type="password" id="register-password" required minlength="8">
+                        <small>8文字以上で入力してください</small>
+                    </div>
+                    <button type="submit" class="btn-primary">登録</button>
+                </form>
+                
+                <div id="auth-error" class="error-message"></div>
+            </div>
+        </div>
+        
+        <!-- Main App Page -->
+        <div id="main-page" class="page hidden">
+            <header class="app-header">
+                <h1>Memory Memo</h1>
+                <div class="header-actions">
+                    <span id="username-display"></span>
+                    <button id="logout-btn" class="btn-secondary">ログアウト</button>
+                </div>
+            </header>
+            
+            <main class="app-main">
+                <!-- Create Memo Section -->
+                <section class="create-memo-section">
+                    <h2>新しいメモ</h2>
+                    <form id="memo-form">
+                        <textarea id="memo-content" placeholder="メモを入力してください..." required></textarea>
+                        <div class="memo-type-buttons">
+                            <button type="submit" name="type" value="forever" class="btn-primary">
+                                永続メモとして保存
+                            </button>
+                            <button type="submit" name="type" value="flush" class="btn-secondary">
+                                24時間メモとして保存
+                            </button>
+                        </div>
+                    </form>
+                </section>
+                
+                <!-- Memos List Section -->
+                <section class="memos-section">
+                    <!-- Forever Memos -->
+                    <div class="memo-category">
+                        <h3>永続メモ</h3>
+                        <div id="forever-memos" class="memos-list">
+                            <!-- Forever memos will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Flush Memos -->
+                    <div class="memo-category">
+                        <h3>24時間メモ</h3>
+                        <div id="flush-memos" class="memos-list">
+                            <!-- Flush memos will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+        
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+    
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>メモを編集</h3>
+                <button id="close-modal" class="btn-icon">&times;</button>
+            </div>
+            <form id="edit-memo-form">
+                <textarea id="edit-memo-content" required></textarea>
+                <div class="modal-actions">
+                    <button type="button" id="cancel-edit" class="btn-secondary">キャンセル</button>
+                    <button type="submit" class="btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

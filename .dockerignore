@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+docs/
+
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+
+# Build artifacts
+backend/target/
+backend/Cargo.lock
+*.db
+*.db-*
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+backend/test_*.sh
+backend/quick_test.sh
+backend/memory_memo_test.db*
+backend/quick_test.db*
+backend/cookies.txt
+
+# Temporary files
+tmp/
+temp/
+*.tmp

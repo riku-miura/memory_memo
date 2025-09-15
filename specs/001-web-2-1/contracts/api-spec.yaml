@@ -1,0 +1,294 @@
+openapi: 3.0.3
+info:
+  title: Memory Memo API
+  description: Personal memo application with forever and flush memo types
+  version: 1.0.0
+  contact:
+    name: Memory Memo
+    url: https://rikumiura.com/memory_memo
+
+servers:
+  - url: https://rikumiura.com/memory_memo/api
+    description: Production server
+
+paths:
+  /auth/register:
+    post:
+      summary: Create new user account
+      description: Register a new user with unique username and password
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 50
+                  description: Unique username for login
+                password:
+                  type: string
+                  minLength: 8
+                  description: User password (will be hashed)
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: User ID
+                  username:
+                    type: string
+                    description: Username
+                  created_at:
+                    type: string
+                    format: date-time
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Username already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      summary: Authenticate user
+      description: Login with username and password to create session
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    format: uuid
+                  username:
+                    type: string
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      summary: End user session
+      description: Logout and invalidate session
+      operationId: logoutUser
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Logout successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /memos:
+    get:
+      summary: List user memos
+      description: Get all memos for authenticated user (flush memos first, then forever memos, newest first in each category)
+      operationId: listMemos
+      security:
+        - sessionAuth: []
+      responses:
+        '200':
+          description: Memos retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  flush_memos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FlushMemo'
+                  forever_memos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ForeverMemo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /memos/forever:
+    post:
+      summary: Create forever memo
+      description: Create a new persistent memo
+      operationId: createForeverMemo
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                  description: Memo content
+      responses:
+        '201':
+          description: Forever memo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForeverMemo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /memos/flush:
+    post:
+      summary: Create flush memo
+      description: Create a new temporary memo that expires in 24 hours
+      operationId: createFlushMemo
+      security:
+        - sessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                  description: Memo content
+      responses:
+        '201':
+          description: Flush memo created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlushMemo'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /memos/{memo_id}:
+    delete:
+      summary: Delete memo
+      description: Delete a memo (works for both forever and flush memos)
+      operationId: deleteMemo
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: memo_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Memo ID to delete
+      responses:
+        '200':
+          description: Memo deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Memo not found or not owned by user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: session_id
+      description: Session-based authentication via HTTP-only cookie
+
+  schemas:
+    ForeverMemo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    FlushMemo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        details:
+          type: string
+          description: Additional error details
+
+  responses:
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
